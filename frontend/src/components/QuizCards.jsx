@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FetchLearningPathFromAI} from '../pages/FetchLearningPathFromAI'
 
@@ -57,35 +58,40 @@ const QuizCards = ({ quizData, topic, subject }) => {
     const updatedAnswers = [...userAnswers];
     updatedAnswers[currentIdx] = selectedOption;
     setUserAnswers(updatedAnswers);
-
+  
     let tempScore = 0;
     questions.forEach((q, idx) => {
       if (updatedAnswers[idx] === q.correctAnswer) {
         tempScore++;
       }
     });
-
+  
+    const correctAnswers = tempScore;
     setScore(tempScore);
     setQuizFinished(true);
-    console.log(topic,subject);
-
-    if (tempScore === questions.length) {
-      toast.success("🎉 Full Marks! Unlocking advanced resources...");
-
-      try {
-        const response = await FetchLearningPathFromAI(topic,subject);
-        navigate('/learning-path', { state: {topic,subject, data: response } });
-      } catch (error) {
-        console.error("Error fetching learning path:", error);
-      }
-    } else {
-      const response = await FetchLearningPathFromAI(topic,subject);
-      if (response) {
-        navigate('/learning-path', { state: { topic,subject, data: response } });
-      }
-
+  
+    try {
+      const response = await FetchLearningPathFromAI(topic, subject);
+      navigate('/learning-path', { state: { topic, subject, data: response } });
+    } catch (error) {
+      console.error("Error fetching learning path:", error);
+    }
+  
+    // ✅ Update progress
+    try {
+      const user = JSON.parse(localStorage.getItem("user")); // Or get from context
+      await axios.post("http://localhost:4000/user/updateProgress", {
+        userId: user._id,
+        topic,
+        score: tempScore,
+        correctAnswers,
+      });
+      console.log("✅ Progress updated successfully!");
+    } catch (err) {
+      console.error("❌ Failed to update progress", err);
     }
   };
+  
 
   if (loading) return <p>Loading...</p>;
   if (!questions || questions.length === 0) return <p>No quiz available. Please go back.</p>;

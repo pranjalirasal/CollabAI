@@ -31,13 +31,17 @@ const Login = () => {
       const res = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(loginInfo),
       });
 
       const result = await res.json();
       if (result.success) {
         toast.success("Login successful!");
-        localStorage.setItem("token", result.token);
+        localStorage.setItem("userName", result.user.name);
+
+        localStorage.setItem("userId", result.user.id);
+
         navigate("/dashboard");
       } else {
         toast.error(result.message || "Login failed");

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const UserGreeting = () => {
-  const userName = localStorage.getItem("userName") || "User";
+  const userName = localStorage.getItem("userName") || "Sakshi";
 
   return (
     <div>
