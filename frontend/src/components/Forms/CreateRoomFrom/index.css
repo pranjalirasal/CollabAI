@@ -1,0 +1,19 @@
+.create{
+    border: 3px solid bla;
+}
+.rounded-left{
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-radius: 0.9rem;
+   
+}
+
+.button {
+    background-color: #493D9E;
+    color: white;
+}
+.generate{ 
+    border-radius: 1rem;
+    padding-left: 10px;
+    
+}
