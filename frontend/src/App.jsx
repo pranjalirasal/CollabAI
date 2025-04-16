@@ -15,6 +15,7 @@ import './App.css';
 import Forms from './components/Forms';
 import RoomPage from "./pages/RoomPage";
 import { useEffect, useState } from 'react';
+import Home from './pages/Home.jsx';
 const server ="http://localhost:4000";
 const connectionOptions={
   "force new connection":true,
@@ -68,7 +69,7 @@ const uuid=()=>{
       />
       <ToastContainer />
       <Routes>
-        <Route path="/"  />
+        <Route path="/" element={<Home />} />
         <Route path="/signUp" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
